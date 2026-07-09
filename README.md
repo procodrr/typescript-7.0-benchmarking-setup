@@ -445,25 +445,6 @@ Using local or npx:
 npx tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics
 ```
 
-Your TypeScript 7 result was:
-
-```text
-Files:              8296
-Lines:           2624546
-Identifiers:     4235299
-Symbols:         7021100
-Types:           2468306
-Instantiations:  3689476
-Memory used:    4745629K
-Memory allocs:  26906194
-Config time:      0.318s
-Parse time:       2.304s
-Bind time:        0.265s
-Check time:      15.338s
-Emit time:        0.179s
-Total time:      18.425s
-```
-
 ---
 
 # 16. TypeScript 6 benchmark command
