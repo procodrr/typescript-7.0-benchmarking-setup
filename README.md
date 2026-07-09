@@ -581,8 +581,6 @@ Developer: Set Log Level
 Developer: Open Logs Folder
 ```
 
-For manual video demo, a screen recording with timer is easiest.
-
 ---
 
 # 20. Editor performance explanation
