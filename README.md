@@ -100,14 +100,6 @@ C++ ATL with Spectre Mitigations
 C++ MFC with Spectre Mitigations
 ```
 
-The exact error we fixed was:
-
-```text
-error MSB8040: Spectre-mitigated libraries are required for this project
-```
-
-The VS Code guide says this error is fixed by installing the MSVC Spectre-mitigated libs, ATL Spectre, and MFC Spectre components. ([GitHub][1])
-
 You do not need to click **Launch** after Build Tools installation. Just close the installer and continue in PowerShell.
 
 ---
@@ -492,37 +484,6 @@ npx -p @typescript/typescript6 tsc6 --noEmit -p ./src/tsconfig.json --extendedDi
 Remove-Item Env:NODE_OPTIONS
 ```
 
-Your TypeScript 6 result was:
-
-```text
-Files:                         8298
-Lines of Library:             57729
-Lines of Definitions:        314263
-Lines of TypeScript:        2251430
-Lines of JavaScript:              0
-Lines of JSON:                 1559
-Lines of Other:                   0
-Identifiers:                4239075
-Symbols:                    5689665
-Types:                      1680036
-Instantiations:             2357431
-Memory used:               5500603K
-Assignability cache size:    576988
-Identity cache size:          25193
-Subtype cache size:          146701
-Strict subtype cache size:   114634
-I/O Read time:                2.04s
-Parse time:                   9.88s
-ResolveModule time:           2.54s
-ResolveTypeReference time:    0.02s
-Program time:                16.87s
-Bind time:                    6.07s
-Check time:                  88.95s
-printTime time:               0.00s
-Emit time:                    0.00s
-Total time:                 111.89s
-```
-
 ---
 
 # 17. Why TypeScript 6 needed NODE_OPTIONS
@@ -540,137 +501,7 @@ TypeScript 7 native handled the same project much better because it is no longer
 
 ---
 
-# 18. Final benchmark report from our run
-
-## Raw data
-
-| Metric      | TypeScript 7 native | TypeScript 6 |
-| ----------- | ------------------: | -----------: |
-| Files       |               8,296 |        8,298 |
-| Total time  |             18.425s |      111.89s |
-| Check time  |             15.338s |       88.95s |
-| Parse time  |              2.304s |        9.88s |
-| Bind time   |              0.265s |        6.07s |
-| Memory used |          4,745,629K |   5,500,603K |
-
-The file count is slightly different, so it is not 100% identical internally, but it is close enough for a practical benchmark on the VS Code repo.
-
-## Speedup
-
-Total time:
-
-```text
-111.89 / 18.425 = 6.07x faster
-```
-
-So:
-
-```text
-TypeScript 7 was around 6.07x faster than TypeScript 6.
-```
-
-Time reduction:
-
-```text
-111.89 - 18.425 = 93.465 seconds saved
-```
-
-Percentage reduction:
-
-```text
-93.465 / 111.89 * 100 = 83.53%
-```
-
-So:
-
-```text
-TypeScript 7 reduced total type-checking time by around 83.5%.
-```
-
-## Check-time speedup
-
-```text
-88.95 / 15.338 = 5.80x faster
-```
-
-So:
-
-```text
-The check phase alone was around 5.8x faster.
-```
-
-Check-time reduction:
-
-```text
-88.95 - 15.338 = 73.612 seconds saved
-```
-
-Percentage reduction:
-
-```text
-73.612 / 88.95 * 100 = 82.76%
-```
-
-So:
-
-```text
-TypeScript 7 reduced check time by around 82.8%.
-```
-
-## Memory comparison
-
-TypeScript 7:
-
-```text
-4,745,629K
-```
-
-TypeScript 6:
-
-```text
-5,500,603K
-```
-
-Difference:
-
-```text
-5,500,603K - 4,745,629K = 754,974K
-```
-
-That is approximately:
-
-```text
-737 MB less memory
-0.72 GiB less memory
-```
-
-Percentage less memory:
-
-```text
-754,974 / 5,500,603 * 100 = 13.73%
-```
-
-So:
-
-```text
-TypeScript 7 used around 13.7% less memory.
-```
-
-Memory ratio:
-
-```text
-5,500,603 / 4,745,629 = 1.16x
-```
-
-So:
-
-```text
-TypeScript 6 used around 1.16x more memory than TypeScript 7.
-```
-
----
-
-# 19. Commands for repeated benchmarking
+# 18. Commands for repeated benchmarking
 
 For better benchmark quality, run each command multiple times.
 
@@ -692,51 +523,7 @@ tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics
 tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics
 ```
 
-## TypeScript 6 repeated test
-
-```powershell
-$env:NODE_OPTIONS="--max-old-space-size=8192"
-
-tsc6 --noEmit -p ./src/tsconfig.json --extendedDiagnostics
-tsc6 --noEmit -p ./src/tsconfig.json --extendedDiagnostics
-tsc6 --noEmit -p ./src/tsconfig.json --extendedDiagnostics
-
-Remove-Item Env:NODE_OPTIONS
-```
-
----
-
-# 20. Optional TypeScript 7 parallelization tests
-
-TypeScript 7 supports these performance-related flags:
-
-```text
---checkers
---builders
---singleThreaded
-```
-
-The TypeScript 7 announcement says TypeScript 7 performs many steps in parallel, including parsing, type-checking, and emitting. It also says the default number of type-checking workers is 4 and can be changed with `--checkers`. ([Microsoft for Developers][3])
-
-Try:
-
-```powershell
-tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics --checkers 1
-tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics --checkers 4
-tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics --checkers 8
-```
-
-Single-threaded test:
-
-```powershell
-tsc --noEmit -p ./src/tsconfig.json --extendedDiagnostics --singleThreaded
-```
-
-Use this to show how much TypeScript 7 benefits from concurrency and multithreading.
-
----
-
-# 21. Editor performance testing
+# 19. Editor performance testing
 
 For editor performance, CLI timing is not enough. Test these actions:
 
@@ -817,9 +604,9 @@ For manual video demo, a screen recording with timer is easiest.
 
 ---
 
-# 22. Editor performance explanation
+# 20. Editor performance explanation
 
-In our testing, TypeScript 7 editor performance looked much faster than CLI type-checking. Sometimes editor readiness, suggestions, and find-all-references felt around 40x to 60x faster.
+In our testing, TypeScript 7 editor performance looked much faster than CLI type-checking. Sometimes editor readiness, suggestions, and find-all-references felt around 50x to 60x faster.
 
 This can happen because editor performance measures more than pure type-checking. It includes:
 
@@ -835,29 +622,6 @@ go-to-definition response
 ```
 
 TypeScript 7 uses a new native implementation, LSP-based language tooling, shared-memory multithreading, and parallel processing. Microsoft also says TypeScript 7’s language server reduced failing language-server commands by over 80% and server crashes by over 60% compared with TypeScript 6. ([Microsoft for Developers][3])
-
-Use this careful wording:
-
-```text
-In CLI type-checking, TypeScript 7 was around 6x faster on my machine.
-But in editor responsiveness, especially cold loading, autocomplete, hover, and find-all-references, the perceived improvement was sometimes much higher, around 40x to 60x in my manual testing.
-```
-
-Do not say globally:
-
-```text
-TypeScript 7 is always 60x faster.
-```
-
-Better:
-
-```text
-In my editor performance test on the VS Code repo, some user-visible operations felt up to 40x to 60x faster.
-```
-
----
-
-# 23. Final command checklist
 
 Use this exact sequence from a fresh setup.
 
