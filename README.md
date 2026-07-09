@@ -1,6 +1,6 @@
 # TypeScript 7 vs TypeScript 6 Benchmark Setup on VS Code Repo
 
-**The Ultimate TypeScript Course**
+**The Ultimate TypeScript Course:**
 [https://app.procodrr.com/web/checkout/69aac6e22e200ab5f21a0793](https://app.procodrr.com/web/checkout/69aac6e22e200ab5f21a0793)
 
 **Coupon Code:** `TSGO`
@@ -76,14 +76,6 @@ v24.17.0
 ```
 
 Do not continue if `node -v` shows Node 25 or any other version.
-
-Earlier, the failed install happened while using:
-
-```text
-node v25.2.1
-```
-
-That was one of the problems.
 
 ---
 
